@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Session beitreten – Blitz Session Feedback</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">Blitz Session Feedback</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card card--padded join__card">
+      <div class="card__head">
+        <h1 class="h1">Session beitreten</h1>
+        <span class="muted small">Code erforderlich</span>
+      </div>
+
+      <p class="muted">
+        Gib den Session-Code ein, den du vom Lehrenden erhalten hast.
+      </p>
+
+      <div class="join__row">
+        <input id="sessionCode" class="input" maxlength="10" placeholder="z.B. A1B2C3" />
+        <button id="joinBtn" class="btn btn--primary">Weiter</button>
+      </div>
+
+      <div id="error" class="alert hidden">
+        Bitte einen gültigen Code eingeben (mind. 4 Zeichen).
+      </div>
+
+      <div class="pillrow">
+        <span class="pill">Anonym</span>
+        <span class="pill">Keine Accounts</span>
+        <span class="pill">Keine Namen</span>
+      </div>
+
+      <div class="tiny muted" style="margin-top:12px;">
+        Du wirst danach zur Student-Seite weitergeleitet.
+      </div>
+    </section>
+  </main>
+
+  <script src="sessioncode.js"></script>
+</body>
+</html>
