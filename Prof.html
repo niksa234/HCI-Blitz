@@ -1,148 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Prof – Timer einstellen</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .box {
-            text-align: center;
-        }
-
-        .tabs button {
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-        }
-
-        .active {
-            background-color: #4CAF50;
-            color: white;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blitz Session Feedback – Professor</title>
+  <link rel="stylesheet" href="student.css" />
 </head>
-
 <body>
-
-    <div class="box">
-        <h2>Timer auswählen</h2>
-
-        <div class="tabs">
-            <button class="active" onclick="setTime(60, this)">60 Minuten</button>
-            <button onclick="setTime(30, this)">30 Minuten</button>
-            <button onclick="setTime(15, this)">15 Minuten</button>
-        </div>
-
-        <br>
-        <button onclick="start()">Start</button>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">Blitz Session Feedback</div>
     </div>
+  </header>
 
-    <script>
-        let selectedTime = 60;
+  <main class="wrap">
+    <section class="card">
+      <div class="cardHead">
+        <h2>Session starten</h2>
+      </div>
 
-        function setTime(time, button) {
-            selectedTime = time;
-            document.querySelectorAll('.tabs button').forEach(btn => {
-                btn.classList.remove('active');
-            });
+      <div class="kicker">Modul</div>
+      <input id="moduleInput" class="textarea" style="min-height:44px" maxlength="80"
+             placeholder="z.B. Einführung in Algorithmen" />
 
-            button.classList.add('active');
-        }
+      <div style="height:10px"></div>
 
-        function start() {
-            window.location.href = `fragen.html?time=${selectedTime}`;
-        }
-    </script>
+      <div class="kicker">Thema / Session-Name</div>
+      <input id="topicInput" class="textarea" style="min-height:44px" maxlength="80"
+             placeholder="z.B. Graphen – Verständnisfragen" />
 
+      <div style="height:10px"></div>
+
+      <div class="kicker">Hinweis / Frage des Lehrenden</div>
+      <textarea id="promptInput" class="textarea" rows="3" maxlength="220"
+                placeholder="z.B. Welche Stelle war heute am unklarsten? Formuliere eine konkrete Frage – andere voten hoch."></textarea>
+
+      <div style="height:10px"></div>
+
+      <div class="kicker">Dauer</div>
+      <div class="row" style="flex-wrap:wrap">
+        <button type="button" class="btn" data-min="60">60 Min</button>
+        <button type="button" class="btn" data-min="30">30 Min</button>
+        <button type="button" class="btn" data-min="15">15 Min</button>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div class="row" style="justify-content:space-between; flex-wrap:wrap">
+        <button id="startBtn" class="btn primary">Session starten</button>
+        <a class="btn" href="index.html" style="text-decoration:none; display:inline-flex; align-items:center;">Zurück</a>
+      </div>
+
+      <div id="errorBox" class="small" style="color:#b91c1c; margin-top:10px; display:none;">
+        Bitte fülle Modul, Thema und Hinweis aus.
+      </div>
+    </section>
+  </main>
+
+  <script src="professor.js"></script>
 </body>
-
-</html>
-
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Fragen</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .content {
-            text-align: center;
-            margin-top: 100px;
-        }
-
-        .question {
-            margin: 10px;
-        }
-
-        button {
-            margin-left: 10px;
-        }
-    </style>
-</head>
-
-<body>
-
-
-
-    <div class="content">
-        <h2>Es gibt 5 Fragen</h2>
-
-        <div class="question">Frage 1 <button onclick="like(this)">👍 <span>0</span></button></div>
-        <div class="question">Frage 2 <button onclick="like(this)">👍 <span>0</span></button></div>
-        <div class="question">Frage 3 <button onclick="like(this)">👍 <span>0</span></button></div>
-        <div class="question">Frage 4 <button onclick="like(this)">👍 <span>0</span></button></div>
-        <div class="question">Frage 5 <button onclick="like(this)">👍 <span>0</span></button></div>
-    </div>
-
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        let minutes = parseInt(params.get("time")) || 60;
-        let seconds = minutes * 60;
-
-        function updateTimer() {
-            let min = Math.floor(seconds / 60);
-            let sec = seconds % 60;
-
-            document.getElementById("timer").textContent =
-                `${min}:${sec.toString().padStart(2, '0')}`;
-
-            if (seconds > 0) {
-                seconds--;
-            } else {
-                clearInterval(timerInterval);
-                alert("Zeit abgelaufen!");
-            }
-        }
-
-        let timerInterval = setInterval(updateTimer, 1000);
-        updateTimer();
-
-        function like(button) {
-            let span = button.querySelector("span");
-            span.textContent = parseInt(span.textContent) + 1;
-        }
-    </script>
-
-</body>
-
 </html>

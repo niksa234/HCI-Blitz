@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blitz Session Feedback – Professor</title>
+  <title>Blitz Session Feedback – Professor Session</title>
   <link rel="stylesheet" href="student.css" />
 </head>
 <body>
@@ -19,43 +19,55 @@
       <div class="sessionRow">
         <div class="sessionMeta">
           <div class="kicker">Modul</div>
-          <div class="title" id="moduleName">Einführung in Algorithmen</div>
-          <div class="sub" id="sessionName">Session: Graphen – Verständnisfragen</div>
+          <div class="title" id="moduleName">—</div>
+          <div class="sub" id="sessionName">—</div>
+
+          <div class="prompt">
+            <div class="kicker">Hinweis / Frage des Lehrenden</div>
+            <p id="profPrompt">—</p>
+          </div>
         </div>
 
         <div class="timerBox" aria-label="Restzeit">
           <div class="kicker">Restzeit</div>
           <div class="timer" id="timer">60:00</div>
+
+          <div style="height:8px"></div>
+
+          <div class="kicker">Session-Code</div>
+          <div style="font-weight:800" id="codeBox">—</div>
+
+          <div style="height:12px"></div>
+
+          <!-- korrekt formatiert: wie primary buttons im student-schema -->
+          <button id="endBtn" class="btn primary" style="width:100%">Beenden</button>
         </div>
       </div>
 
       <div class="sessionFooter">
-        <span class="badge open">OFFEN</span>
-        <span class="muted small">Alle Fragen der Studierenden. Antworte direkt hier.</span>
+        <span class="badge open" id="statusBadge">OFFEN</span>
       </div>
     </section>
 
-    <!-- Single Question View -->
+    <!-- Questions -->
     <section class="card">
       <div class="cardHead">
         <h2>Fragen der Studierenden</h2>
+        <div class="controls">
+          <label class="srOnly" for="sortSelect">Sortieren</label>
+          <select id="sortSelect" class="select">
+            <option value="top">Meist gevotet</option>
+            <option value="new">Neueste</option>
+          </select>
+        </div>
       </div>
 
-      <div class="list" id="questionContainer" aria-live="polite">
-        <!-- Hier wird dynamisch immer nur eine Frage angezeigt -->
-      </div>
-
-      <div class="small muted footerNote">
-        Tipp: Beantworte die Fragen nacheinander. Nach jeder Antwort erscheint die nächste.
-      </div>
+      <div class="list" id="questionList" aria-live="polite"></div>
     </section>
 
-    <footer class="pageFooter tiny muted">
-      Prototyp (ohne Backend). Antworten ggf. lokal im Browser gespeichert.
-    </footer>
+    <footer class="pageFooter tiny muted"></footer>
   </main>
 
   <script src="professor.js"></script>
 </body>
 </html>
-
