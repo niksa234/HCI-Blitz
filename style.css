@@ -67,3 +67,45 @@ main {
     background-color: var(--blau);
     color: var(--weiss);
 }
+
+.widget {
+    background-color: var(--weiss);
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 320px;
+}
+
+.widget h1 {
+    color: var(--blau);
+    margin-bottom: 30px;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 120px;
+    height: 50px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    border-radius: 10px;
+    border: 2px solid var(--blau);
+
+    background-color: var(--weiss);
+    color: var(--blau);
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    background-color: var(--blau);
+    color: var(--weiss);
+    transform: translateY(-2px);
+}
