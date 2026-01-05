@@ -1,0 +1,69 @@
+:root {
+    /* Blau-Weiß-Farbschema */
+    --blau: #052681;
+    --weiss: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--weiss);
+}
+
+/* Header & Footer */
+header,
+footer {
+    background-color: var(--blau);
+    color: var(--weiss);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Hauptbereich */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--weiss);
+}
+
+.content {
+    text-align: center;
+}
+
+.content h1 {
+    color: var(--blau);
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.buttons button {
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid var(--blau);
+    background-color: var(--weiss);
+    color: var(--blau);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.buttons button:hover {
+    background-color: var(--blau);
+    color: var(--weiss);
+}
