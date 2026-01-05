@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blitz Session Feedback – Professor</title>
+  <link rel="stylesheet" href="student.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">Blitz Session Feedback</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Session Card -->
+    <section class="card">
+      <div class="sessionRow">
+        <div class="sessionMeta">
+          <div class="kicker">Modul</div>
+          <div class="title" id="moduleName">Einführung in Algorithmen</div>
+          <div class="sub" id="sessionName">Session: Graphen – Verständnisfragen</div>
+        </div>
+
+        <div class="timerBox" aria-label="Restzeit">
+          <div class="kicker">Restzeit</div>
+          <div class="timer" id="timer">60:00</div>
+        </div>
+      </div>
+
+      <div class="sessionFooter">
+        <span class="badge open">OFFEN</span>
+        <span class="muted small">Alle Fragen der Studierenden. Antworte direkt hier.</span>
+      </div>
+    </section>
+
+    <!-- Single Question View -->
+    <section class="card">
+      <div class="cardHead">
+        <h2>Fragen der Studierenden</h2>
+      </div>
+
+      <div class="list" id="questionContainer" aria-live="polite">
+        <!-- Hier wird dynamisch immer nur eine Frage angezeigt -->
+      </div>
+
+      <div class="small muted footerNote">
+        Tipp: Beantworte die Fragen nacheinander. Nach jeder Antwort erscheint die nächste.
+      </div>
+    </section>
+
+    <footer class="pageFooter tiny muted">
+      Prototyp (ohne Backend). Antworten ggf. lokal im Browser gespeichert.
+    </footer>
+  </main>
+
+  <script src="professor.js"></script>
+</body>
+</html>
+
