@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Prof – Timer einstellen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            text-align: center;
+        }
+
+        .tabs button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .active {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Timer auswählen</h2>
+
+    <div class="tabs">
+        <button class="active" onclick="setTime(60, this)">60 Minuten</button>
+        <button onclick="setTime(30, this)">30 Minuten</button>
+        <button onclick="setTime(15, this)">15 Minuten</button>
+    </div>
+
+    <br>
+    <button onclick="start()">Start</button>
+</div>
+
+<script>
+    let selectedTime = 60;
+
+    function setTime(time, button) {
+        selectedTime = time;
+
+        // aktive Klasse zurücksetzen
+        document.querySelectorAll('.tabs button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        button.classList.add('active');
+    }
+
+    function start() {
+        window.location.href = `fragen.html?time=${selectedTime}`;
+    }
+</script>
+
+</body>
+</html>
+
+<!--checkpoint-->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .question {
+            margin: 10px;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="timer" id="timer"></div>
+
+<div class="content">
+    <h2>Es gibt 5 Fragen</h2>
+
+    <div class="question">Frage 1 <button onclick="like(this)">👍 <span>0</span></button></div>
+    <div class="question">Frage 2 <button onclick="like(this)">👍 <span>0</span></button></div>
+    <div class="question">Frage 3 <button onclick="like(this)">👍 <span>0</span></button></div>
+    <div class="question">Frage 4 <button onclick="like(this)">👍 <span>0</span></button></div>
+    <div class="question">Frage 5 <button onclick="like(this)">👍 <span>0</span></button></div>
+</div>
+
+<script>
+    // Zeit aus URL holen
+    const params = new URLSearchParams(window.location.search);
+    let minutes = parseInt(params.get("time")) || 60;
+    let seconds = minutes * 60;
+
+    function updateTimer() {
+        let min = Math.floor(seconds / 60);
+        let sec = seconds % 60;
+
+        document.getElementById("timer").textContent =
+            `${min}:${sec.toString().padStart(2, '0')}`;
+
+        if (seconds > 0) {
+            seconds--;
+        } else {
+            clearInterval(timerInterval);
+            alert("Zeit abgelaufen!");
+        }
+    }
+
+    let timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+
+    function like(button) {
+        let span = button.querySelector("span");
+        span.textContent = parseInt(span.textContent) + 1;
+    }
+</script>
+
+</body>
+</html>
