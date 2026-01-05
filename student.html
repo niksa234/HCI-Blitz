@@ -7,149 +7,88 @@
   <link rel="stylesheet" href="student.css" />
 </head>
 <body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">Blitz Session Feedback</div>
+    </div>
+  </header>
+
   <main class="wrap">
-    <header class="header">
-      <div>
-        <h1>Blitz Session Feedback</h1>
-        <p class="sub">Anonym. Schnell. Ohne Diskussion.</p>
-      </div>
-      <div class="tiny muted">Student</div>
-    </header>
+    <!-- Session Card -->
+    <section class="card">
+      <div class="sessionRow">
+        <div class="sessionMeta">
+          <div class="kicker">Modul</div>
+          <div class="title" id="moduleName">Einführung in Algorithmen</div>
+          <div class="sub" id="sessionName">Session: Graphen – Verständnisfragen</div>
+        </div>
 
-    <!-- JOIN -->
-    <section class="card" id="joinCard">
-      <div class="cardHead">
-        <h2>Session beitreten</h2>
-        <span class="hint">Code oder Link</span>
-      </div>
-
-      <p class="muted small">
-        Gib den Session-Code ein. Falls du einen Link hast, ist der Code meist schon enthalten.
-      </p>
-
-      <div class="row">
-        <label class="srOnly" for="code">Session-Code</label>
-        <input id="code" class="input" inputmode="text" maxlength="10" placeholder="z.B. A1B2C3" />
-        <button class="btn primary" id="joinBtn">Beitreten</button>
-      </div>
-
-      <div class="divider"></div>
-
-      <p class="small muted">
-        Datenschutz: Es werden keine Namen gespeichert. Keine Diskussion, nur aggregierte Signale.
-      </p>
-    </section>
-
-    <!-- STATUS -->
-    <section class="card hidden" id="statusCard">
-      <div class="cardHead">
-        <h2>Session Status</h2>
-        <div class="badge open" id="statusBadge">OFFEN</div>
-      </div>
-
-      <div class="statusGrid">
-        <div class="statusItem">
-          <div class="tiny muted">Restzeit</div>
+        <div class="timerBox" aria-label="Restzeit">
+          <div class="kicker">Restzeit</div>
           <div class="timer" id="timer">60:00</div>
         </div>
-        <div class="statusItem">
-          <div class="tiny muted">Hinweis</div>
-          <div class="small">Du brauchst weniger als 1 Minute.</div>
-        </div>
       </div>
 
-      <div class="tiny muted">Session-Code: <span id="codeEcho">—</span></div>
-    </section>
-
-    <!-- NOTICE -->
-    <section class="card hidden" id="noticeCard">
-      <div class="cardHead">
-        <h2>Hinweis vom Lehrenden</h2>
-        <span class="hint">optional</span>
-      </div>
-      <p class="noticeText" id="noticeText">
-        Heute besonders wichtig: Definitionen + Beispielaufgaben. Falls etwas unklar ist, markiert es kurz unten.
-      </p>
-    </section>
-
-    <!-- QUESTIONS -->
-    <section class="card hidden" id="questionsCard">
-      <div class="cardHead">
-        <h2>1-Minuten-Feedback</h2>
-        <span class="hint">4 Fragen</span>
-      </div>
-
-      <form id="form" autocomplete="off">
-        <!-- Q1 -->
-        <fieldset class="block">
-          <legend>Wie klar waren die Inhalte heute?</legend>
-          <div class="choices" data-q="q1">
-            <button type="button" class="chip" data-value="klar">Klar</button>
-            <button type="button" class="chip" data-value="teils">Teils</button>
-            <button type="button" class="chip" data-value="unklar">Unklar</button>
-          </div>
-        </fieldset>
-
-        <!-- Q2 -->
-        <fieldset class="block">
-          <legend>Wie sicher fühlst du dich beim Thema?</legend>
-          <div class="scale" data-q="q2" aria-label="Skala 1 bis 5">
-            <button type="button" class="chip" data-value="1">1</button>
-            <button type="button" class="chip" data-value="2">2</button>
-            <button type="button" class="chip" data-value="3">3</button>
-            <button type="button" class="chip" data-value="4">4</button>
-            <button type="button" class="chip" data-value="5">5</button>
-          </div>
-          <div class="tiny muted">1 = gar nicht sicher, 5 = sehr sicher</div>
-        </fieldset>
-
-        <!-- Q3 -->
-        <fieldset class="block">
-          <legend>Was war am schwierigsten?</legend>
-          <div class="choices" data-q="q3">
-            <button type="button" class="chip" data-value="tempo">Tempo</button>
-            <button type="button" class="chip" data-value="beispiele">Beispiele</button>
-            <button type="button" class="chip" data-value="definitionen">Definitionen</button>
-            <button type="button" class="chip" data-value="aufgaben">Aufgaben</button>
-          </div>
-        </fieldset>
-
-        <!-- Q4 -->
-        <div class="block">
-          <label for="q4" class="label">Sonstiges (optional)</label>
-          <textarea id="q4" class="textarea" maxlength="120" rows="2"
-            placeholder="Max. 120 Zeichen – z.B. „Folien zu schnell“"></textarea>
-          <div class="row spaceBetween tiny muted">
-            <span>Keine Namen/Personenbezüge.</span>
-            <span id="charCount">0/120</span>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button type="button" class="btn primary" id="sendBtn">Feedback senden</button>
-          <button type="button" class="btn" id="resetBtn">Zurücksetzen</button>
-        </div>
-
-        <p class="tiny muted footnote">
-          Dein Feedback wird nur aggregiert angezeigt. Einzelne Texte werden nicht hervorgehoben.
+      <div class="prompt">
+        <div class="kicker">Frage des Lehrenden</div>
+        <p id="profPrompt">
+          Welche Stelle war heute am unklarsten? Formuliere eine konkrete Frage – andere können sie hochvoten.
         </p>
-      </form>
+      </div>
+
+      <div class="sessionFooter">
+        <span class="badge open" id="statusBadge">OFFEN</span>
+        <span class="muted small">Anonym. Keine Namen. Nur Priorisierung durch Votes.</span>
+      </div>
     </section>
 
-    <!-- CONFIRM -->
-    <section class="card hidden" id="confirmCard">
-      <div class="confirm">
-        <div class="check">✓</div>
-        <div>
-          <h2>Feedback eingegangen</h2>
-          <p class="muted small">Danke. Dein Feedback ist anonym.</p>
+    <!-- Ask Question -->
+    <section class="card">
+      <div class="cardHead">
+        <h2>Deine Frage</h2>
+        <span class="hint">max. 160 Zeichen</span>
+      </div>
+
+      <div class="askGrid">
+        <div class="askField">
+          <label class="srOnly" for="questionInput">Frage eingeben</label>
+          <textarea id="questionInput" class="textarea" maxlength="160" rows="3"
+            placeholder="Beispiel: Warum funktioniert Dijkstra nur ohne negative Kanten?"></textarea>
+
+          <div class="row spaceBetween tiny muted">
+            <span>Keine personenbezogenen Inhalte.</span>
+            <span id="charCount">0/160</span>
+          </div>
+        </div>
+
+        <button class="btn primary" id="submitQuestion">Frage senden</button>
+      </div>
+
+      <div class="toast hidden" id="toast">Gesendet ✓</div>
+    </section>
+
+    <!-- Questions List -->
+    <section class="card">
+      <div class="cardHead">
+        <h2>Fragen der anderen</h2>
+        <div class="controls">
+          <label class="srOnly" for="sortSelect">Sortieren</label>
+          <select id="sortSelect" class="select">
+            <option value="top">Meist gevotet</option>
+            <option value="new">Neueste</option>
+          </select>
         </div>
       </div>
-      <button class="btn" id="backBtn">Zurück</button>
+
+      <div class="list" id="questionList" aria-live="polite"></div>
+
+      <div class="small muted footerNote">
+        Tipp: Vote nur Fragen, die du auch beantwortet haben möchtest. So landet Wichtiges oben.
+      </div>
     </section>
 
-    <footer class="footer tiny muted">
-      Prototyp – keine echte Session-Logik, keine Datenspeicherung.
+    <footer class="pageFooter tiny muted">
+      Prototyp (ohne Backend). Daten ggf. lokal im Browser gespeichert.
     </footer>
   </main>
 

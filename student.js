@@ -1,39 +1,7 @@
-const joinBtn = document.getElementById("joinBtn");
-const sendBtn = document.getElementById("sendBtn");
-const resetBtn = document.getElementById("resetBtn");
-const backBtn = document.getElementById("backBtn");
-
-const joinCard = document.getElementById("joinCard");
-const statusCard = document.getElementById("statusCard");
-const noticeCard = document.getElementById("noticeCard");
-const questionsCard = document.getElementById("questionsCard");
-const confirmCard = document.getElementById("confirmCard");
-
-const codeInput = document.getElementById("code");
-const codeEcho = document.getElementById("codeEcho");
-
+// --- Fake timer (60:00) ---
 const timerEl = document.getElementById("timer");
+let remaining = 60 * 60;
 let timerInterval = null;
-let remaining = 60 * 60; // 60:00 fake
-
-// selection handling for chips
-document.querySelectorAll(".choices, .scale").forEach(group => {
-  group.addEventListener("click", (e) => {
-    const btn = e.target.closest("button");
-    if (!btn) return;
-
-    // single-select within group
-    group.querySelectorAll(".chip").forEach(b => b.classList.remove("selected"));
-    btn.classList.add("selected");
-  });
-});
-
-// text count
-const q4 = document.getElementById("q4");
-const charCount = document.getElementById("charCount");
-q4.addEventListener("input", () => {
-  charCount.textContent = `${q4.value.length}/120`;
-});
 
 function fmt(sec){
   const m = Math.floor(sec / 60);
@@ -43,7 +11,6 @@ function fmt(sec){
 
 function startTimer(){
   clearInterval(timerInterval);
-  remaining = 60 * 60;
   timerEl.textContent = fmt(remaining);
   timerInterval = setInterval(() => {
     remaining = Math.max(0, remaining - 1);
@@ -51,56 +18,162 @@ function startTimer(){
     if (remaining === 0) clearInterval(timerInterval);
   }, 1000);
 }
+startTimer();
 
-function showSessionUI(code){
-  codeEcho.textContent = code || "—";
-  joinCard.classList.add("hidden");
-  statusCard.classList.remove("hidden");
-  noticeCard.classList.remove("hidden");
-  questionsCard.classList.remove("hidden");
-  confirmCard.classList.add("hidden");
-  startTimer();
+// --- Prototype data store (local) ---
+const STORAGE_KEY = "blitz_questions_v1";
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch { return null; }
 }
 
-function showConfirm(){
-  questionsCard.classList.add("hidden");
-  confirmCard.classList.remove("hidden");
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ questions, votedIds }));
 }
 
-function resetAll(){
-  // clear selections
-  document.querySelectorAll(".chip.selected").forEach(b => b.classList.remove("selected"));
-  q4.value = "";
-  charCount.textContent = "0/120";
+// sample questions
+let questions = [
+  { id: crypto.randomUUID(), text: "Warum funktioniert Dijkstra nicht mit negativen Kanten?", votes: 7, ts: Date.now() - 1000*60*18 },
+  { id: crypto.randomUUID(), text: "Wie genau wird die Relaxation im Algorithmus angewendet?", votes: 4, ts: Date.now() - 1000*60*9 },
+  { id: crypto.randomUUID(), text: "Was ist der Unterschied zwischen BFS und Dijkstra in der Praxis?", votes: 2, ts: Date.now() - 1000*60*4 },
+];
+
+let votedIds = new Set(); // local "I voted" state
+
+const saved = loadState();
+if (saved?.questions && Array.isArray(saved.questions)) {
+  questions = saved.questions;
+}
+if (saved?.votedIds && Array.isArray(saved.votedIds)) {
+  votedIds = new Set(saved.votedIds);
 }
 
-function backToJoin(){
-  clearInterval(timerInterval);
-  resetAll();
-  codeInput.value = "";
-  joinCard.classList.remove("hidden");
-  statusCard.classList.add("hidden");
-  noticeCard.classList.add("hidden");
-  questionsCard.classList.add("hidden");
-  confirmCard.classList.add("hidden");
-}
+// --- UI elements ---
+const listEl = document.getElementById("questionList");
+const sortSelect = document.getElementById("sortSelect");
+const input = document.getElementById("questionInput");
+const charCount = document.getElementById("charCount");
+const submitBtn = document.getElementById("submitQuestion");
+const toast = document.getElementById("toast");
 
-joinBtn.addEventListener("click", () => {
-  const code = (codeInput.value || "").trim().toUpperCase();
-  showSessionUI(code || "A1B2C3");
+// --- Char counter ---
+input.addEventListener("input", () => {
+  charCount.textContent = `${input.value.length}/160`;
 });
 
-sendBtn.addEventListener("click", () => {
-  // no real submit, just UI
-  showConfirm();
-});
-
-resetBtn.addEventListener("click", resetAll);
-backBtn.addEventListener("click", backToJoin);
-
-// Optional: auto-fill code from URL (?code=ABC123) for nicer demo
-const params = new URLSearchParams(window.location.search);
-const urlCode = params.get("code");
-if (urlCode){
-  codeInput.value = urlCode.toUpperCase();
+// --- Sorting ---
+function getSorted(){
+  const mode = sortSelect.value;
+  const arr = [...questions];
+  if (mode === "new") {
+    arr.sort((a,b) => b.ts - a.ts);
+  } else {
+    // top: votes desc, tie-breaker newest
+    arr.sort((a,b) => (b.votes - a.votes) || (b.ts - a.ts));
+  }
+  return arr;
 }
+
+sortSelect.addEventListener("change", render);
+
+// --- Render list ---
+function render(){
+  const items = getSorted();
+  listEl.innerHTML = "";
+
+  if (items.length === 0) {
+    listEl.innerHTML = `<div class="muted small">Noch keine Fragen. Stell die erste.</div>`;
+    return;
+  }
+
+  for (const q of items) {
+    const voted = votedIds.has(q.id);
+
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = `
+      <div class="itemLeft">
+        <p class="itemText"></p>
+        <div class="itemMeta">
+          <span>${timeAgo(q.ts)}</span>
+          <span>•</span>
+          <span>${q.votes} Vote${q.votes === 1 ? "" : "s"}</span>
+        </div>
+      </div>
+      <div class="voteBox">
+        <button class="voteBtn ${voted ? "voted" : ""}" aria-label="Frage upvoten">▲</button>
+        <div class="voteCount">${q.votes}</div>
+      </div>
+    `;
+
+    el.querySelector(".itemText").textContent = q.text;
+
+    el.querySelector(".voteBtn").addEventListener("click", () => {
+      // prototype behavior: toggle vote
+      const qq = questions.find(x => x.id === q.id);
+      if (!qq) return;
+
+      if (votedIds.has(q.id)) {
+        votedIds.delete(q.id);
+        qq.votes = Math.max(0, qq.votes - 1);
+      } else {
+        votedIds.add(q.id);
+        qq.votes += 1;
+      }
+      persistAndRerender();
+    });
+
+    listEl.appendChild(el);
+  }
+}
+
+function timeAgo(ts){
+  const diff = Date.now() - ts;
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return "gerade eben";
+  if (min < 60) return `vor ${min} Min`;
+  const h = Math.floor(min / 60);
+  return `vor ${h} Std`;
+}
+
+function persistAndRerender(){
+  saveState();
+  render();
+}
+
+render();
+
+// --- Submit new question ---
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.remove("hidden");
+  window.clearTimeout(showToast._t);
+  showToast._t = window.setTimeout(() => toast.classList.add("hidden"), 1400);
+}
+
+submitBtn.addEventListener("click", () => {
+  const text = (input.value || "").trim();
+  if (text.length < 5) {
+    showToast("Bitte etwas konkreter (min. 5 Zeichen).");
+    return;
+  }
+
+  const q = {
+    id: crypto.randomUUID(),
+    text,
+    votes: 0,
+    ts: Date.now()
+  };
+
+  questions.push(q);
+  input.value = "";
+  charCount.textContent = "0/160";
+
+  // keep current sort; typically top. your new question appears accordingly
+  showToast("Gesendet ✓");
+  persistAndRerender();
+});
