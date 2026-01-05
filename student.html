@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blitz Session Feedback – Student</title>
+  <link rel="stylesheet" href="student.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <div class="brand">Blitz Session Feedback</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Session Card -->
+    <section class="card">
+      <div class="sessionRow">
+        <div class="sessionMeta">
+          <div class="kicker">Modul</div>
+          <div class="title" id="moduleName">Einführung in Algorithmen</div>
+          <div class="sub" id="sessionName">Session: Graphen – Verständnisfragen</div>
+        </div>
+
+        <div class="timerBox" aria-label="Restzeit">
+          <div class="kicker">Restzeit</div>
+          <div class="timer" id="timer">60:00</div>
+        </div>
+      </div>
+
+      <div class="prompt">
+        <div class="kicker">Frage des Lehrenden</div>
+        <p id="profPrompt">
+          Welche Stelle war heute am unklarsten? Formuliere eine konkrete Frage – andere können sie hochvoten.
+        </p>
+      </div>
+
+      <div class="sessionFooter">
+        <span class="badge open" id="statusBadge">OFFEN</span>
+        <span class="muted small">Anonym. Keine Namen. Nur Priorisierung durch Votes.</span>
+      </div>
+    </section>
+
+    <!-- Ask Question -->
+    <section class="card">
+      <div class="cardHead">
+        <h2>Deine Frage</h2>
+        <span class="hint">max. 160 Zeichen</span>
+      </div>
+
+      <div class="askGrid">
+        <div class="askField">
+          <label class="srOnly" for="questionInput">Frage eingeben</label>
+          <textarea id="questionInput" class="textarea" maxlength="160" rows="3"
+            placeholder="Beispiel: Warum funktioniert Dijkstra nur ohne negative Kanten?"></textarea>
+
+          <div class="row spaceBetween tiny muted">
+            <span>Keine personenbezogenen Inhalte.</span>
+            <span id="charCount">0/160</span>
+          </div>
+        </div>
+
+        <button class="btn primary" id="submitQuestion">Frage senden</button>
+      </div>
+
+      <div class="toast hidden" id="toast">Gesendet ✓</div>
+    </section>
+
+    <!-- Questions List -->
+    <section class="card">
+      <div class="cardHead">
+        <h2>Fragen der anderen</h2>
+        <div class="controls">
+          <label class="srOnly" for="sortSelect">Sortieren</label>
+          <select id="sortSelect" class="select">
+            <option value="top">Meist gevotet</option>
+            <option value="new">Neueste</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="list" id="questionList" aria-live="polite"></div>
+
+      <div class="small muted footerNote">
+        Tipp: Vote nur Fragen, die du auch beantwortet haben möchtest. So landet Wichtiges oben.
+      </div>
+    </section>
+
+    <footer class="pageFooter tiny muted">
+      Prototyp (ohne Backend). Daten ggf. lokal im Browser gespeichert.
+    </footer>
+  </main>
+
+  <script src="student.js"></script>
+</body>
+</html>
