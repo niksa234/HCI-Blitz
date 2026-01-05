@@ -1,5 +1,4 @@
 :root {
-    /* Blau-Weiß-Farbschema */
     --blau: #052681;
     --weiss: #ffffff;
 }
@@ -18,7 +17,6 @@ body {
     background-color: var(--weiss);
 }
 
-/* Header & Footer */
 header,
 footer {
     background-color: var(--blau);
@@ -27,7 +25,7 @@ footer {
     padding: 20px;
 }
 
-/* Hauptbereich */
+
 main {
     flex: 1;
     display: flex;
