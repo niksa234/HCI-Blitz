@@ -8,28 +8,28 @@
 const STORAGE_KEY = "blitz_prof_session_v1";
 const QUESTIONS_KEY = "blitz_questions_v1";
 
-function $(id){ return document.getElementById(id); }
-function qsa(sel){ return Array.from(document.querySelectorAll(sel)); }
+function $(id) { return document.getElementById(id); }
+function qsa(sel) { return Array.from(document.querySelectorAll(sel)); }
 
-function randomCode(len = 6){
+function randomCode(len = 6) {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let out = "";
-  for (let i=0;i<len;i++) out += alphabet[Math.floor(Math.random()*alphabet.length)];
+  for (let i = 0; i < len; i++) out += alphabet[Math.floor(Math.random() * alphabet.length)];
   return out;
 }
 
-function saveSession(session){
+function saveSession(session) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
 }
-function loadSession(){
+function loadSession() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); }
   catch { return null; }
 }
 
-function saveQuestions(arr){
+function saveQuestions(arr) {
   localStorage.setItem(QUESTIONS_KEY, JSON.stringify(arr));
 }
-function loadQuestions(){
+function loadQuestions() {
   try {
     const raw = localStorage.getItem(QUESTIONS_KEY);
     if (!raw) return [];
@@ -40,10 +40,10 @@ function loadQuestions(){
   }
 }
 
-/* -----------------------------
-   PAGE: prof.html (Setup)
------------------------------ */
-(function initProfSetup(){
+
+
+
+(function initProfSetup() {
   const moduleInput = $("moduleInput");
   if (!moduleInput) return;
 
@@ -55,7 +55,7 @@ function loadQuestions(){
   let selectedMin = 60;
   const durationButtons = qsa('button[data-min]');
 
-  function setSelected(min){
+  function setSelected(min) {
     selectedMin = min;
     durationButtons.forEach(b => {
       b.classList.remove("primary");
@@ -70,10 +70,10 @@ function loadQuestions(){
 
   startBtn.addEventListener("click", () => {
     const module = (moduleInput.value || "").trim();
-    const topic  = (topicInput.value || "").trim();
+    const topic = (topicInput.value || "").trim();
     const prompt = (promptInput.value || "").trim();
 
-    if (!module || !topic || !prompt){
+    if (!module || !topic || !prompt) {
       errorBox.style.display = "block";
       return;
     }
@@ -96,13 +96,12 @@ function loadQuestions(){
 
     saveSession(session);
 
-    // Init questions if empty
     const existing = loadQuestions();
-    if (existing.length === 0){
+    if (existing.length === 0) {
       saveQuestions([
-        { id: crypto.randomUUID(), text: "Warum funktioniert Dijkstra nicht mit negativen Kanten?", votes: 7, ts: Date.now() - 1000*60*18 },
-        { id: crypto.randomUUID(), text: "Was ist der Unterschied zwischen BFS und Dijkstra?", votes: 4, ts: Date.now() - 1000*60*9 },
-        { id: crypto.randomUUID(), text: "Wie genau wird die Relaxation angewendet?", votes: 2, ts: Date.now() - 1000*60*4 },
+        { id: crypto.randomUUID(), text: "Warum funktioniert Dijkstra nicht mit negativen Kanten?", votes: 7, ts: Date.now() - 1000 * 60 * 18 },
+        { id: crypto.randomUUID(), text: "Was ist der Unterschied zwischen BFS und Dijkstra?", votes: 4, ts: Date.now() - 1000 * 60 * 9 },
+        { id: crypto.randomUUID(), text: "Wie genau wird die Relaxation angewendet?", votes: 2, ts: Date.now() - 1000 * 60 * 4 },
       ]);
     }
 
@@ -110,27 +109,24 @@ function loadQuestions(){
   });
 })();
 
-/* -----------------------------
-   PAGE: ProfSession.html (Dashboard)
------------------------------ */
-(function initProfSession(){
+(function initProfSession() {
   const moduleName = $("moduleName");
   if (!moduleName) return;
 
   const sessionName = $("sessionName");
-  const profPrompt  = $("profPrompt");
-  const codeBox     = $("codeBox");
+  const profPrompt = $("profPrompt");
+  const codeBox = $("codeBox");
   const statusBadge = $("statusBadge");
-  const timerEl     = $("timer");
-  const endBtn      = $("endBtn");
-  const sortSelect  = $("sortSelect");
-  const listEl      = $("questionList");
+  const timerEl = $("timer");
+  const endBtn = $("endBtn");
+  const sortSelect = $("sortSelect");
+  const listEl = $("questionList");
 
   const params = new URLSearchParams(window.location.search);
   const urlCode = (params.get("code") || "").toUpperCase();
   const session = loadSession();
 
-  if (!session || (urlCode && session.code !== urlCode)){
+  if (!session || (urlCode && session.code !== urlCode)) {
     moduleName.textContent = "Session nicht gefunden";
     sessionName.textContent = "Bitte starte eine neue Session.";
     profPrompt.textContent = "—";
@@ -148,14 +144,14 @@ function loadQuestions(){
 
   let timerInterval = null;
 
-  function fmt(sec){
-    const m = Math.floor(sec/60);
+  function fmt(sec) {
+    const m = Math.floor(sec / 60);
     const s = sec % 60;
-    return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   }
 
-  function setStatus(open){
-    if (open){
+  function setStatus(open) {
+    if (open) {
       statusBadge.textContent = "OFFEN";
       statusBadge.classList.add("open");
     } else {
@@ -164,12 +160,12 @@ function loadQuestions(){
     }
   }
 
-  function tick(){
+  function tick() {
     const now = Date.now();
-    const remainingSec = Math.max(0, Math.floor((session.endTs - now)/1000));
+    const remainingSec = Math.max(0, Math.floor((session.endTs - now) / 1000));
     timerEl.textContent = fmt(remainingSec);
 
-    if (remainingSec <= 0){
+    if (remainingSec <= 0) {
       clearInterval(timerInterval);
       session.status = "CLOSED";
       saveSession(session);
@@ -179,7 +175,7 @@ function loadQuestions(){
   }
 
   setStatus(session.status === "OPEN");
-  if (session.status !== "OPEN"){
+  if (session.status !== "OPEN") {
     endBtn.disabled = true;
   }
 
@@ -195,36 +191,36 @@ function loadQuestions(){
     tick();
   });
 
-  // Questions rendering
+  // Questions lsden
   let questions = loadQuestions();
 
-  function timeAgo(ts){
+  function timeAgo(ts) {
     const diff = Date.now() - ts;
-    const min = Math.floor(diff/60000);
+    const min = Math.floor(diff / 60000);
     if (min < 1) return "gerade eben";
     if (min < 60) return `vor ${min} Min`;
-    const h = Math.floor(min/60);
+    const h = Math.floor(min / 60);
     return `vor ${h} Std`;
   }
 
-  function sorted(){
+  function sorted() {
     const mode = sortSelect.value;
     const arr = [...questions];
-    if (mode === "new") arr.sort((a,b) => b.ts - a.ts);
-    else arr.sort((a,b) => (b.votes - a.votes) || (b.ts - a.ts));
+    if (mode === "new") arr.sort((a, b) => b.ts - a.ts);
+    else arr.sort((a, b) => (b.votes - a.votes) || (b.ts - a.ts));
     return arr;
   }
 
-  function render(){
+  function render() {
     listEl.innerHTML = "";
     const arr = sorted();
 
-    if (arr.length === 0){
+    if (arr.length === 0) {
       listEl.innerHTML = `<div class="muted small">Noch keine Fragen eingegangen.</div>`;
       return;
     }
 
-    for (const q of arr){
+    for (const q of arr) {
       const item = document.createElement("div");
       item.className = "item";
 
@@ -234,7 +230,7 @@ function loadQuestions(){
           <div class="itemMeta">
             <span>${timeAgo(q.ts)}</span>
             <span>•</span>
-            <span>${q.votes} Vote${q.votes===1?"":"s"}</span>
+            <span>${q.votes} Vote${q.votes === 1 ? "" : "s"}</span>
           </div>
         </div>
         <div class="voteBox">

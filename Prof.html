@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="de">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Blitz Session Feedback – Professor</title>
   <link rel="stylesheet" href="student.css" />
 </head>
+
 <body>
   <header class="topbar">
     <div class="topbar__inner">
@@ -20,20 +22,17 @@
       </div>
 
       <div class="kicker">Modul</div>
-      <input id="moduleInput" class="textarea" style="min-height:44px" maxlength="80"
-             placeholder="z.B. Einführung in Algorithmen" />
+      <input id="moduleInput" class="textarea" style="min-height:44px" maxlength="80" placeholder="Lorem Ipsum" />
 
       <div style="height:10px"></div>
 
       <div class="kicker">Thema / Session-Name</div>
-      <input id="topicInput" class="textarea" style="min-height:44px" maxlength="80"
-             placeholder="z.B. Graphen – Verständnisfragen" />
+      <input id="topicInput" class="textarea" style="min-height:44px" maxlength="80" placeholder="Lorem Ipsum" />
 
       <div style="height:10px"></div>
 
       <div class="kicker">Hinweis / Frage des Lehrenden</div>
-      <textarea id="promptInput" class="textarea" rows="3" maxlength="220"
-                placeholder="z.B. Welche Stelle war heute am unklarsten? Formuliere eine konkrete Frage – andere voten hoch."></textarea>
+      <textarea id="promptInput" class="textarea" rows="3" maxlength="220" placeholder="Lorem Ipsum"></textarea>
 
       <div style="height:10px"></div>
 
@@ -48,7 +47,8 @@
 
       <div class="row" style="justify-content:space-between; flex-wrap:wrap">
         <button id="startBtn" class="btn primary">Session starten</button>
-        <a class="btn" href="index.html" style="text-decoration:none; display:inline-flex; align-items:center;">Zurück</a>
+        <a class="btn" href="index.html"
+          style="text-decoration:none; display:inline-flex; align-items:center;">Zurück</a>
       </div>
 
       <div id="errorBox" class="small" style="color:#b91c1c; margin-top:10px; display:none;">
@@ -59,4 +59,5 @@
 
   <script src="professor.js"></script>
 </body>
+
 </html>

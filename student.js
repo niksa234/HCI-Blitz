@@ -173,7 +173,6 @@ submitBtn.addEventListener("click", () => {
   input.value = "";
   charCount.textContent = "0/160";
 
-  // keep current sort; typically top. your new question appears accordingly
   showToast("Gesendet ✓");
   persistAndRerender();
 });
