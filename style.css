@@ -31,7 +31,8 @@ body {
 }
 
 /* Header */
-header {
+header,
+.topbar {
     background: linear-gradient(0deg, var(--primary), var(--primary));
     color: white;
     position: sticky;
@@ -50,6 +51,7 @@ header h2 {
     font-size: 16px;
     font-weight: 700;
     letter-spacing: .2px;
+    color: white;
 }
 
 .brand {
@@ -64,6 +66,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .wrap,
@@ -74,6 +77,11 @@ main {
     display: flex;
     flex-direction: column;
     gap: 14px;
+}
+
+/* Widget für Index-Seite */
+main:has(.widget) {
+    min-height: calc(100vh - 120px);
 }
 
 /* Cards */
@@ -93,7 +101,28 @@ main {
 .widget {
     padding: 40px 50px;
     text-align: center;
-    min-width: 320px;
+    min-width: 400px;
+    max-width: 500px;
+}
+
+.widget h1 {
+    color: var(--text);
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.widget .buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.widget .btn {
+    width: 140px;
+    height: 60px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .cardHead,
